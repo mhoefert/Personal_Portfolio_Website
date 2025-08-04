@@ -204,6 +204,10 @@ const Title = styled(motion.h1)`
   display: block;
   white-space: nowrap;
 
+  @media (max-width: 1024px) {
+    font-size: clamp(3rem, 12vw, 10rem); 
+  }
+
   @media (max-width: 400px) {
     font-size: clamp(1.5rem, 8vw, 3.2rem);
     padding: 0 6%;
