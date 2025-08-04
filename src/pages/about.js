@@ -449,15 +449,15 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <AboutText>
-              <h2>Hi! I'm Michael!</h2>
+              <h2>Hi, I'm Michael!</h2>
               <p>
-                I'm a Product Manager with 5 years of experience in building digital product as well as conducting technology and product growth strategies. 
-                My journey in product started with a background in PropTech corporate strategy, which taught the skills of deep research and truly
-                understanding your users/personas to ensure we build the right product and then build it to target the right pain points.
+                I'm a Product Manager with 5 years of experience in building digital products as well as conducting technology and product growth strategies. 
+                My journey in product started with a background in PropTech corporate strategy. Here I learned deep research skills and the importance of truly
+                understanding your users/personas to ensure the right product is built and also targets the right pain points.
               </p>
               <p>
                 I believe in a user-centered approach to product development, combining data-driven decision making with 
-                deep user research. My favorite tehnique to employ is Jeff Patton's User Story Mapping techique. 
+                deep user research. My favorite technique to employ is Jeff Patton's User Story Mapping technique. 
                 Jeff's technique allows me to truly understand the customer and subsequently ensure there is a shared understanding
                 between the product team, the engineering teams, and all stakeholders on what we are building and why.
               </p>

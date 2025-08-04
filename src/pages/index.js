@@ -202,9 +202,7 @@ const Title = styled(motion.h1)`
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   display: block;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
+  white-space: nowrap;
 
   @media (max-width: 400px) {
     font-size: clamp(1.5rem, 8vw, 3.2rem);
@@ -880,7 +878,7 @@ const mainCards = [
   {
     number: '01',
     title: 'MY PRODUCT MANAGEMENT',
-    description: 'Explore some of my work, I believe great products require constant engagement with the customer. I take this mindset when creating products.',
+    description: 'Explore some of my work. I believe great products require constant engagement with the customer. I take this mindset when creating products.',
     href: '/my-product-management',
     gradientType: 'product'
   },
@@ -965,7 +963,7 @@ const workItems = [
       <ContentText>
         <p style={{ marginBottom: '1.5em' }}>Every year I set myself a goal to do hard things, typically some sort of extreme physical challenge that ends up testing my mental resilience as well. This year, the Chase the Sun + Dragon Devil weekend was the second one of those challenges. Earlier in the year I completed the lap of Mallorca (which you can read about on this site as well). The lap of Mallorca was extremely challenging, but I felt I could go deeper, push my boundaries even more. Without a doubt this Chase the Dragon ride would be the biggest physical and mental challenge I will have ever undertaken. However, little did I know that it would test me in a completely different way than I expected.</p>
         <p style={{ marginBottom: '1.5em' }}>Long story short, during both days I felt extremely strong on the bike and wasn't suffering physically or mentally nearly as much as I thought I would be (all that training I'd been doing really paid off). To be quite honest, I felt it was pretty easy all things considered. However, the one thing I didn't expect for the Dragon ride was the weather. Forecasts leading up to the day promised a hot 30+ degree day with sun. Reality was quite different. The weather was biblical to say the least. The storms, the rain, and the wind were brutal. I had never biked through anything like that before and at kilometer 245 of the 295km race all things suddenly went wrong, really wrong.</p>
-        <p style={{ marginBottom: '1.5em' }}>The storm is getting incredibly bad, I am in remote Wales, and then I get a flat tire. I am drenched to the bone, temperatures have dropped to 7 degrees, and I am comically underdressed. I scramble to take the wheel and tire off to replace my flat tube. I get tire sorted relatively quickly and am back rolling in 10 minutes. But soon after I get started again, I feel the wheel go flat again. Shit. Now I'm out of tubes, stuck in a storm in a remote part of Wales, absolutely freezing and have no way to fix my tire.</p>
+        <p style={{ marginBottom: '1.5em' }}>The storm is getting incredibly bad, I am in remote Wales, and then I get a flat tire. I am drenched to the bone, temperatures have dropped to 7 degrees, and I am comically underdressed. I scramble to take the wheel and tire off to replace my flat tube. I get tire sorted relatively quickly and am back rolling in 10 minutes. But soon after I get started again, I feel the wheel go flat again. S***. Now I'm out of tubes, stuck in a storm in a remote part of Wales, absolutely freezing and have no way to fix my tire.</p>
         <p style={{ marginBottom: '1.5em' }}>What do I do? I start to panic a bit, naturally. But before I let myself spiral I realize that the situation is actually quite dire and I don't have the luxury to panic. I need to figure out a plan. I knew there was an emergency mechanic van you call, and the phone number is listed on the race number you have to pin to yourself. I get my phone out to call the mechanic and my phone is dead. A wave of dread washes over me. What do I do now? I know I can't let myself panic even though I'm shivering beyond control now, have a flat tire with no means to fix it, and a dead phone.</p>
         <p style={{ marginBottom: '1.5em' }}>Suddenly I remember that about 1km down the climb there was an event photographer. I run down the hill with my bike to the photographer who is sitting in a massive rain coat in the rain. I tap his shoulder and begin to explain the situation to him. He lets me borrow his phone and sit in his car which is parked on the side of the road. I end up managing to call the mechanic and in about an hour the mechanic arrives and sets me up with a new tire.</p>
         <p style={{ marginBottom: '1.5em' }}>There are more details here and there that I've left out in an effort to minimize how long this description is. Long story short, I managed to get to the next feed station at kilometer 255 where I ended up DNFing with several paramedics beside me assessing my condition. I was uncontrollably shivering with mild-hypothermia, the storm was getting even worse and I knew it was incredibly unsafe to continue.</p>
@@ -1005,7 +1003,7 @@ const workItems = [
         <p style={{ marginBottom: '1.5em' }}><b>Deployment, Testing & Iteration:</b> The deployed product, "Intelligent Cleaning," transformed our static cleaning service. The system uses data to create and inform cleaning schedules, routes, and daily operations to move towards a demand-based service delivery model (leading to cleaner spaces and happier tenants).</p>
         <p style={{ marginBottom: '1.5em' }}>We conducted User Acceptance Testing (UAT) with our users, gathering qualitative feedback to identify trends and patterns for continuous improvement. This iterative process of testing and gathering feedback has been crucial for the product's success.</p>
         <p style={{ marginBottom: '1.5em' }}>The impact was twofold. Firstly, we received powerful testimonials from cleaners who felt empowered by their ability to influence schedules and focus on areas that genuinely needed attention. Secondly, the product delivered significant business value, reducing our cost to serve by approximately 10%, a substantial saving in the low-margin facilities management industry. We continue to monitor the product, test new features, and iterate based on user feedback and performance data.</p>
-        <p>One additional side benefit that we weren’t targeting (but ended up being quite a nice surprise) was the reduction in customer complaints to our operations teams. The reduction in complaints meant we had better relationships with our customers, the operations teams could focus on, and in a couple of the bid re-tender processes (ie. Contract renewals), it was noted by the customer how the customer experience had improved.</p>
+        <p>One additional side benefit that we weren’t targeting (but ended up being quite a nice surprise) was the reduction in customer complaints to our operations teams. The reduction in complaints meant we had a better relationships with our customers and the operations teams could focus on their main work tasks rather than reactive requests. We even saw that in a couple of the bid re-tender processes (ie. Contract renewals) customers were noting how the customer experience had improved.</p>
       </ContentText>
     ),
   },
@@ -1073,14 +1071,14 @@ const workItems = [
     description: 'On the final day of a week-long cycling trip in Mallorca, I tackled the iconic Mallorca 312, extending it by incorporating the legendary Sa Calobra climb, starting at 5:30am under starry skies and battling intense heat, dehydration, and physical pain through major ascents like Coll de Femenia, Puig Major, and  Sa Calobra.',
     additionalDetails: (
       <ContentText>
-        <p style={{ marginBottom: '1.5em' }}>The Mallorca 312, an iconic road ride around the island of Mallorca. A milestone and goal road cyclists use to test themselves and see where their limits lie. On our last day in Mallorca after 6 days of back to back riding, me and two friends decided to tackle the challenge, but with one twist. On top of the 312km we were going to add on one of the most famous climbs of the island, Sa Callobra. This brought the total ride statistics to 325km and 4572m of elevation.</p>
-        <p style={{ marginBottom: '1.5em' }}>The day started early with a 5:30am rollout time. The goal was to make sure we could end in the day time. The first 30 minutes of the ride were in the twilight hours of the morning. If I could describe the feeling during these first 30 minutes, I would say; calm. We were the only ones up and out on the roads. The stars were crystal clear. The birds weren’t even chirping yet. All you could hear was the rhythmic sound of our bike chains and the sound of our tires on the pristine Mallorca tarmac. That sense of calm would only last so long.</p>
+        <p style={{ marginBottom: '1.5em' }}>The Mallorca 312 is an iconic road ride around the island of Mallorca. A milestone and goal road cyclists use to test themselves and see where their limits lie. On our last day in Mallorca after 6 days of back to back riding, myself and two friends decided to tackle the challenge, but with one twist. On top of the 312km we were going to add on one of the most famous climbs of the island, Sa Callobra. This brought the total ride statistics to 325km and 4572m of elevation.</p>
+        <p style={{ marginBottom: '1.5em' }}>The day started early with a 5:30am rollout time. The goal was to make sure we could end in day light. The first 30 minutes of the ride were in the twilight hours of the morning. If I could describe the feeling during these first 30 minutes, I would say; calm. We were the only ones up and out on the roads. The stars were crystal clear. The birds weren’t even chirping yet. All you could hear was the rhythmic sound of our bike chains and the sound of our tires on the pristine Mallorca tarmac. That sense of calm would only last so long.</p>
         <p style={{ marginBottom: '1.1em' }}>Soon the sun was up and out in full blast, but we kept pushing along. To be honest, everything was going really well and I was feeling really strong. We aimed to minimize our stopping so the first stop was at the 100km mark where we stopped at a gas station to grab a bocadillo. After this first stop is when things started to get harder. The sun was pelting down on us. I started to feel the signs of dehdryation and the dehydration was made evident when I stood on the pedals to climb a hill and my lower back seized up. I was in excruciating pain. But I was at the pack of our 3 person pace line and I refused to be the reason we stopped or slowed down. Stubborn, I know. I closed my eyes, sat back down on the saddle and gritted my teeth through the pain until my lower back loosened a bit. For the next hour and a half I did all I could to not move around on the saddle in fear that I would cause another seizing up of my lower back.</p>
         <p style={{ marginBottom: '1.1em' }}>At the next pit stop, 200km into the ride, I buy all the electrolyte drinks and big bag of salty chips in an effort to replenish the salt I’d lost. But this is when I knew the ride would start to get challenging. We were staying in Soller, which meant that vast majority of the climbing would take place in the last 120km of the ride. </p>
-        <p style={{ marginBottom: '1.5em' }}>After this quick pit stop we apprehisvely get back on the bikes to start the final push of the ride where we would tackle Coll de Femenia (the iconic lighthouse climb), Puig Major (the highest accessible climb on the island), and then wrapping it up with the infamous Sa Calobra climb. Three beasts and 120km still lay ahead of us. </p>
+        <p style={{ marginBottom: '1.5em' }}>After this quick pit stop we apprehensively get back on the bikes to start the final push of the ride where we would tackle Coll de Femenia (the iconic lighthouse climb), Puig Major (the highest accessible climb on the island), and then wrapping it up with the infamous Sa Calobra climb. Three beasts and 120km still lay ahead of us. </p>
         <p style={{ marginBottom: '1.5em' }}>Coll de Femenia is upon us and one of the three of us is feeling strong and decides to push ahead a bit faster. We all finish it with relative ease and then regroup at the end of the climb.</p>
-        <p style={{ marginBottom: '1.5em' }}>Next we start approaching Puig Major. The one of us that had gone ahead on Coll de Femenia was starting to crack. At the base of Puig Major he actually split and fell back from us, deciding to go his own pace. The two of us keep pushing on. After 2 hours steadily climbing we make it to the peak of Puig Major where we wait for our friend. After some time he rolls in, defeated. Because of the way the route was made and the nature of Sa Calobra (which is an out and back climb), we always had the option to skip the Sa Calobra climb and head home if we were running short on time. At this point in the day, if we decided to do Sa Calobra we would be pushing it if we wanted to finish in daylight - there could be no messing around and nothing could go wrong. Otherwise we would have to complete the 17km descent back into solar in the pitch black. Our friend decides to head directly home, whereas myself and my other friend decide to continue with the original plan.</p>
-        <p style={{ marginBottom: '1.5em' }}>So next comes Sa Calobra, the most iconic and beautiful climb on the island. Typically jam packed with tourists in rental cars and massive busses. But considering it was nearing sunset, we were blessed with an empty road. We had all the room in the world to hit every single apex and truly enjoy the wonder that is Sa Calobra. We descend this stunning 11km descent, get to the bottom, grab a quick photo, and 2 minutes later begin the final climb back out. Again, the roads are absolutely empty and I cannot emphasize enough how rare this is. It was truly a magical experience the way the sun was shining and setting into the valley as we climbed back up. </p>
+        <p style={{ marginBottom: '1.5em' }}>Next we start approaching Puig Major. The one of us that had gone ahead on Coll de Femenia was starting to crack. At the base of Puig Major he actually split and fell back from us, deciding to go his own pace. The two of us keep pushing on. After 2 hours steadily climbing we make it to the peak of Puig Major where we wait for our friend. After some time he rolls in, defeated. Because of the way the route was made and the nature of Sa Calobra (which is an out and back climb), we always had the option to skip the Sa Calobra climb and head home if we were running short on time. At this point in the day, if we decided to do Sa Calobra we would be pushing it if we wanted to finish in daylight - there could be no messing around and nothing could go wrong. Otherwise we would have to complete the 17km descent back into Soller in the pitch black. Our friend decides to head directly home, whereas myself and my other friend decide to continue with the original plan.</p>
+        <p style={{ marginBottom: '1.5em' }}>So next comes Sa Calobra, the most iconic and beautiful climb on the island. It is typically jam packed with tourists in rental cars and massive buses. But considering it was nearing sunset, we were blessed with an empty road. We had all the room in the world to hit every single apex and truly enjoy the wonder that is Sa Calobra. We descend this stunning 11km descent, get to the bottom, grab a quick photo, and 2 minutes later begin the final climb back out. Again, the roads are absolutely empty and I cannot emphasize enough how rare this is. It was truly a magical experience the way the sun was shining and setting into the valley as we climbed back up. </p>
         <p style={{ marginBottom: '1.5em' }}>Long story short, we made it back home. On the final 17km descent back home we were blessed with even more golden light from the sunset, the ultimate finale to an epic adventure. During the day I went through ups and downs. There were moments where I wished the ride was over and others where all I wanted to do was keep riding. But I had this itch. This itch that I hadn’t pushed or tested myself as much as I had wanted. I still had more in me. I guess I needed to find my next challenge. Maybe I would chase a dragon? </p>
       </ContentText>
     ),
@@ -1347,7 +1345,7 @@ const Home = () => {
             <CardsGrid>
               {mainCards.map(({ number, title, description, href, gradientType }, index) => (
                 <div key={number} style={{ width: '100%' }}>
-                  <Link href={href} style={{ textDecoration: 'none', display: 'block', height: '100%', cursor: 'pointer' }}>
+                  <div style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
                     <AnimatedBorder
                       gradientType={gradientType}
                       custom={index}
@@ -1368,22 +1366,6 @@ const Home = () => {
                       whileTap={{ scale: 0.99 }}
                       viewport={{ once: true, margin: '-15% 0px', amount: 0.2 }}
                       variants={cardAnimation}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.currentTarget.style.position = 'fixed';
-                        e.currentTarget.style.top = '0';
-                        e.currentTarget.style.left = '0';
-                        e.currentTarget.style.width = '100vw';
-                        e.currentTarget.style.height = '100vh';
-                        e.currentTarget.style.zIndex = '1000';
-                        e.currentTarget.style.borderRadius = '0';
-                        e.currentTarget.style.padding = '0';
-                        
-                        // After animation completes, navigate
-                        setTimeout(() => {
-                          window.location.href = href;
-                        }, 500);
-                      }}
                     >
                       <MainCard gradientType={gradientType}>
                         <ProcessNumber>
@@ -1405,7 +1387,7 @@ const Home = () => {
                         </ContentWrapper>
                       </MainCard>
                     </AnimatedBorder>
-                  </Link>
+                  </div>
                 </div>
               ))}
             </CardsGrid>
