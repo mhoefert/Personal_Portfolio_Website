@@ -41,8 +41,52 @@ const Title = styled.h1`
 `;
 
 const Description = styled.p`
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.space[4]};
+  font-size: 1rem;
+  line-height: 1.6;
+`;
+
+const ContactInfo = styled.div`
   color: ${({ theme }) => theme.colors.textLight};
-  margin-bottom: ${({ theme }) => theme.space[6]};
+  margin: ${({ theme }) => `${theme.space[4]} auto 0`};
+  font-size: 0.95rem;
+  line-height: 1.7;
+  text-align: center;
+  max-width: 320px;
+  padding: ${({ theme }) => theme.space[4]};
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  
+  p {
+    margin: 0 0 ${({ theme }) => theme.space[4]} 0;
+  }
+`;
+
+const EmailLink = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1.25rem;
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 auto;
+  
+  &:hover {
+    background: #FF9B17;
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(-1px) scale(0.98);
+  }
 `;
 
 const Input = styled.input`
@@ -166,6 +210,15 @@ export default function PasswordProtect({ children }) {
             Continue
           </Button>
         </form>
+        <ContactInfo>
+          <p>If you do not have the password, contact me and I am more than happy to give it to you!</p>
+          <EmailLink href="mailto:mhoefert1@gmail.com" aria-label="Email">
+            <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </EmailLink>
+        </ContactInfo>
       </PasswordBox>
     </PasswordContainer>
   );
