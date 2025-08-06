@@ -169,9 +169,3 @@ img {
   height: 100%;
 }
 
-@media (max-width: 360px) {
-  h3, p {
-    font-size: 1.1rem !important;  /* Force minimum for all text elements */
-    line-height: 1.6;
-  }
-}

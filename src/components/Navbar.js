@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled, { keyframes } from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiMenu, FiX } from 'react-icons/fi';
+import { theme } from '../styles/theme';
 
 const gradientMove = keyframes`
   0% {
@@ -11,9 +14,6 @@ const gradientMove = keyframes`
     background-position: 100% 50%;
   }
 `;
-import { motion } from 'framer-motion';
-import { FiMenu, FiX } from 'react-icons/fi';
-import { theme } from '../styles/theme';
 
 const Nav = styled(motion.nav)`
   position: fixed;
@@ -90,25 +90,43 @@ const NavLinks = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space[2]};
   align-items: center;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
 
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
-    right: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
-    width: 80%;
-    max-width: 300px;
+    right: 0;
+    width: 85%;
+    max-width: 320px;
     height: 100vh;
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     flex-direction: column;
-    padding: 80px 24px 24px;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-    z-index: ${({ theme }) => theme.zIndices.modal};
-    border-radius: 0 0 0 24px;
+    padding: 100px 24px 40px;
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    will-change: transform, visibility;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                visibility 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  
+  @media (max-width: 480px) {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    padding: 90px 16px 40px;
   }
 `;
 
-const NavLink = styled.a`
+const NavLink = styled(motion.a)`
   color: #000000;
   text-decoration: none;
   font-weight: 500;
@@ -120,11 +138,12 @@ const NavLink = styled.a`
   font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow: hidden;
   z-index: 1;
-  transition: color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1.2;
+  -webkit-tap-highlight-color: transparent;
 
   &::before {
     content: '';
@@ -163,45 +182,104 @@ const NavLink = styled.a`
   `}
 
   @media (max-width: 768px) {
-    font-size: ${({ theme }) => theme.fontSizes.lg};
-    padding: ${({ theme }) => `${theme.space[3]} ${theme.space[4]}`};
+    font-size: 18px;
+    padding: 16px 24px;
     width: 100%;
-    text-align: center;
+    text-align: left;
+    justify-content: flex-start;
+    border-radius: 12px;
+    margin: 4px 0;
+    transition: all 0.2s ease;
+    
+    &:active {
+      transform: scale(0.98);
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+    
+    ${({ isActive, isFilterActive }) => (isActive || isFilterActive) && `
+      background: linear-gradient(90deg, #FFF085, #FCB454, #FF9B17);
+      color: #000000;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(255, 155, 23, 0.2);
+    `}
   }
 `;
 
 const MenuButton = styled.button`
-  background: none;
+  background: ${({ isOpen }) => isOpen ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
   border: none;
-  color: ${({ theme }) => theme.colors.gray700};
+  color: #333;
   font-size: 24px;
   cursor: pointer;
   display: none;
-  z-index: ${({ theme }) => theme.zIndices.modal + 1};
-  padding: 8px;
+  z-index: 1002;
+  padding: 12px;
   border-radius: 50%;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
   
   &:hover {
-    background-color: ${({ theme }) => theme.colors.gray100};
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
 
   @media (max-width: 768px) {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
-const Overlay = styled.div`
+const MobileMenu = styled(motion.div)`
+  position: fixed;
+  top: 80px; /* Positioned below the navbar */
+  right: 20px;
+  width: calc(100% - 40px);
+  max-width: 320px;
+  max-height: calc(100vh - 100px); /* Adjusted to account for top and bottom spacing */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  z-index: 1001;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 23px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+`;
+
+const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: ${({ theme }) => theme.zIndices.overlay};
-  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
 `;
 
 const navItems = [
@@ -220,11 +298,103 @@ const navItems = [
   },
 ];
 
-export default function Navbar({ activeFilter, setActiveFilter, filter }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const router = useRouter();
+const MobileNavLink = styled.a`
+  display: flex;
+  align-items: center;
+  color: #333;
+  text-decoration: none;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 14px 20px;
+  margin: 4px 12px;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #FFF085, #FCB454, #FF9B17);
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+    border-radius: 14px;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 155, 23, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+    color: #FF9B17;
+    
+    &::before {
+      opacity: 0.15;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.1s ease;
+  }
+  
+  ${({ $isActive }) => $isActive && `
+    background: linear-gradient(90deg, #FFF085, #FCB454, #FF9B17);
+    color: #000;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 155, 23, 0.2);
+    
+    &:hover {
+      transform: none;
+      box-shadow: 0 4px 12px rgba(255, 155, 23, 0.3);
+      
+      &::before {
+        opacity: 0;
+      }
+    }
+  `}
+`;
 
+export default function Navbar({ activeFilter, setActiveFilter, filter }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const menuRef = useRef(null);
+
+  // Function to handle filter changes
+  const handleFilterClick = (e, filterValue, filterName) => {
+    e.preventDefault();
+    setActiveFilter(filterValue);
+    // Navigate to the home page with the filter and hash
+    router.push({
+      pathname: '/',
+      query: { filter: filterName },
+      hash: 'portfolio-section'
+    });
+  };
+
+  // Close menu when route changes
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsOpen(false);
+      document.body.style.overflow = '';
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.events]);
+
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
@@ -233,78 +403,179 @@ export default function Navbar({ activeFilter, setActiveFilter, filter }) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen) {
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        const menuButton = document.querySelector('[aria-label^="Menu"]');
+        if (menuButton && !menuButton.contains(event.target)) {
+          setIsOpen(false);
+          document.body.style.overflow = '';
+        }
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
     }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
   const closeMenu = () => {
     setIsOpen(false);
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = '';
   };
 
-  // Filter navigation items based on current route
-  const filteredNavItems = router.pathname === '/about' 
-    ? navItems.filter(item => item.path === '/about')
-    : navItems;
-
   return (
-    <Nav 
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      scrolled={scrolled}
-    >
-      <NavContainer>
-        <Link href="/" passHref>
-          <Logo 
-            onClick={(e) => {
-              if (setActiveFilter) {
-                e.preventDefault();
-                setActiveFilter(null);
-                window.history.pushState({}, '', '/');
-              }
-            }}
-          >
-            Michael's Portfolio
-          </Logo>
-        </Link>
-        
-        <MenuButton onClick={toggleMenu} aria-label="Toggle menu">
-          {isOpen ? <FiX /> : <FiMenu />}
-        </MenuButton>
-        
-        <NavLinks isOpen={isOpen}>
-          {filteredNavItems.map((item) => (
-            <Link key={item.path} href={item.path} passHref>
-              <NavLink 
-                isActive={router.pathname === item.path}
-                isFilterActive={activeFilter === item.avatar}
-                onClick={(e) => {
-                  closeMenu();
-                  if (item.filter) {
-                    e.preventDefault();
-                    const newFilter = activeFilter === item.avatar ? null : item.avatar;
-                    setActiveFilter(newFilter);
-                    // Update URL without page reload
-                    window.history.pushState({}, '', newFilter ? item.path : '/');
-                  }
+    <>
+      <AnimatePresence>
+        {isOpen && (
+          <Overlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={closeMenu}
+          />
+        )}
+      </AnimatePresence>
+
+      <Nav scrolled={scrolled}>
+        <div>
+          <NavContainer>
+            <Link href="/" passHref>
+              <Logo 
+                onClick={() => {
+                  setIsOpen(false);
+                  document.body.style.overflow = '';
                 }}
               >
-                {item.name}
-              </NavLink>
+                Michael Hoefert
+              </Logo>
             </Link>
-          ))}
-        </NavLinks>
-      </NavContainer>
-    </Nav>
+            
+            <MenuButton 
+              onClick={toggleMenu} 
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              isOpen={isOpen}
+            >
+              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </MenuButton>
+            
+            <NavLinks>
+              <Link href="/about/" passHref>
+                <NavLink isActive={router.pathname === '/about/'}>
+                  Myself
+                </NavLink>
+              </Link>
+              <Link href="/my-product-management/" passHref>
+                <NavLink 
+                  isActive={router.pathname === '/my-product-management/'}
+                  isFilterActive={activeFilter === '/images/professional_headshot.jpeg'}
+                  onClick={(e) => handleFilterClick(e, '/images/professional_headshot.jpeg', 'professional')}
+                >
+                  My Product Management
+                </NavLink>
+              </Link>
+              <Link href="/my-adventures/" passHref>
+                <NavLink 
+                  isActive={router.pathname === '/my-adventures/'}
+                  isFilterActive={activeFilter === '/images/biking_headshot.JPG'}
+                  onClick={(e) => handleFilterClick(e, '/images/biking_headshot.JPG', 'adventures')}
+                >
+                  My Adventures
+                </NavLink>
+              </Link>
+            </NavLinks>
+
+            <AnimatePresence>
+              {isOpen && (
+                <MobileMenu
+                  ref={menuRef}
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <Link href="/about/" passHref legacyBehavior>
+                    <MobileNavLink
+                      as={motion.a}
+                      $isActive={router.pathname === '/about/'}
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                      onClick={() => {
+                        setIsOpen(false);
+                        document.body.style.overflow = '';
+                      }}
+                    >
+                      Myself
+                    </MobileNavLink>
+                  </Link>
+                  <Link href="/my-product-management/" passHref legacyBehavior>
+                    <MobileNavLink
+                      as={motion.a}
+                      $isActive={router.pathname === '/my-product-management/' || activeFilter === '/images/professional_headshot.jpeg'}
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.2, delay: 0.1 }}
+                      onClick={(e) => {
+                        handleFilterClick(e, '/images/professional_headshot.jpeg', 'professional');
+                        setIsOpen(false);
+                        document.body.style.overflow = '';
+                      }}
+                    >
+                      My Product Management
+                    </MobileNavLink>
+                  </Link>
+                  <Link href="/my-adventures/" passHref legacyBehavior>
+                    <MobileNavLink
+                      as={motion.a}
+                      $isActive={router.pathname === '/my-adventures/' || activeFilter === '/images/biking_headshot.JPG'}
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.2, delay: 0.2 }}
+                      onClick={(e) => {
+                        handleFilterClick(e, '/images/biking_headshot.JPG', 'adventures');
+                        setIsOpen(false);
+                        document.body.style.overflow = '';
+                      }}
+                    >
+                      My Adventures
+                    </MobileNavLink>
+                  </Link>
+                </MobileMenu>
+              )}
+            </AnimatePresence>
+          </NavContainer>
+        </div>
+      </Nav>
+      
+      <Overlay 
+        isOpen={isOpen}
+        onClick={closeMenu}
+        initial={{ opacity: 0 }}
+        animate={isOpen ? 'open' : 'closed'}
+        variants={{
+          open: { opacity: 1, visibility: 'visible' },
+          closed: { opacity: 0, visibility: 'hidden' }
+        }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      />
+    </>
   );
 }

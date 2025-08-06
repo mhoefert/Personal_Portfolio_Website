@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import { FiArrowRight, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
@@ -184,7 +185,7 @@ const PreTitle = styled(motion.p)`
 
 const Title = styled(motion.h1)`
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 16vw, 19.6rem);
+  font-size: clamp(4rem, 16.5vw, 20rem);
   font-weight: 700;
   margin: 0;
   padding: 0 2%;
@@ -203,16 +204,6 @@ const Title = styled(motion.h1)`
   box-sizing: border-box;
   display: block;
   white-space: nowrap;
-
-  @media (max-width: 1024px) {
-    font-size: clamp(3rem, 12vw, 10rem); 
-  }
-
-  @media (max-width: 400px) {
-    font-size: clamp(1.5rem, 8vw, 3.2rem);
-    padding: 0 6%;
-    line-height: 1.2;
-  }
 `;
 
 const Subtitle = styled(motion.p)`
@@ -617,23 +608,26 @@ const WorkStats = styled.div`
 const AnimatedBorder = styled(motion.div)`
   position: relative;
   border-radius: 16px;
-  padding: 4.5px; /* Increased from 3px to 6px for thicker border */
+  padding: 2px;
   background: ${({ gradientType }) => 
     gradientType === 'adventures' 
       ? 'linear-gradient(90deg, #FFF085, #FCB454, #FF9B17)'
       : 'linear-gradient(90deg, #722323, #BA487F, #FF9587)'};
   background-size: 200% 200%;
   animation: gradient 10s ease infinite;
-  opacity: 0.8; /* Slightly increased opacity for more vibrant colors */
+  opacity: 0.8;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   height: 100%;
   width: 100%;
   display: block;
-  will-change: transform, width, box-shadow;
-  overflow: visible;
+  overflow: hidden;
   z-index: 1;
-  transform-origin: center;
+  will-change: transform, box-shadow;
+  
+  @media (min-width: 768px) {
+    padding: 3px;
+  }
   
   @keyframes gradient {
     0% { background-position: 0% 50%; }
@@ -650,40 +644,32 @@ const AnimatedBorder = styled(motion.div)`
 const MainCard = styled(motion.div)`
   background: white;
   border-radius: 14px;
-  padding: clamp(24px, 3vw, 40px);
+  padding: 24px;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  min-height: 280px;
+  min-height: 200px;
   width: 100%;
   opacity: 1 !important;
   position: relative;
   z-index: 1;
-  will-change: transform, box-shadow;
   overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  gap: 24px;
   
-   @media (max-width: 1024px) {
-    padding: 28px 24px; /* Fixed padding for tablets */
-    min-height: 260px;
+  @media (max-width: 1024px) {
+    padding: 20px;
+    gap: 20px;
   }
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 24px 20px;
-    min-height: auto;
-    width: 90%;
-    margin: 0 auto;
-  }
-  
-  @media (max-width: 480px) {
     padding: 20px 16px;
+    gap: 16px;
   }
   
   &::before {
@@ -739,10 +725,8 @@ const ProcessHeader = styled.div`
 
 const ProcessNumber = styled.div`
   flex-shrink: 0;
-  width: clamp(100px, 13vw, 180px);
-  height: clamp(100px, 13vw, 180px);
-  min-width: 80px;
-  min-height: 80px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: linear-gradient(135deg, #FFF085, #FCB454, #FF9B17, #F16767);
   overflow: hidden;
@@ -755,8 +739,7 @@ const ProcessNumber = styled.div`
   
   img {
     width: 100%;
-    height: auto;
-    max-height: 100%;
+    height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
   }
@@ -765,13 +748,8 @@ const ProcessNumber = styled.div`
     transform: scale(1.05);
   }
 
-  @media (max-width: 1248px) {
-    width: 150px; /* Fixed size for large tablets */
-    height: 150px;
-  }
-
   @media (max-width: 1024px) {
-    width: 130px; /* Optimal size for iPad */
+    width: 130px;
     height: 130px;
   }
 
@@ -785,11 +763,6 @@ const ProcessNumber = styled.div`
     width: 100px;
     height: 100px;
     border-width: 4px;
-  }
-
-  @media (max-width: 360px) {
-    width: 80px;
-    height: 80px;
   }
 `;
 
@@ -823,23 +796,16 @@ const ProcessTitle = styled.h3`
 
 const ContentWrapper = styled.div`
   flex: 1;
-  margin-left: clamp(24px, 3.5vw, 48px);
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
-  
-  @media (max-width: 1024px) {
-    margin-left: 32px;
-  }
+  text-align: left;
+  padding: 10px 0;
   
   @media (max-width: 768px) {
-    margin: 24px 0 0 0;
     text-align: center;
-  }
-  
-  @media (max-width: 480px) {
-    margin-top: 16px;
+    padding: 0;
+    width: 100%;
   }
 `;
 
@@ -1233,10 +1199,36 @@ const ImageCarousel = ({ images = [] }) => {
 };
 
 const Home = () => {
+  const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [activeFilter, setActiveFilter] = useState(null);
   const [expandedCard, setExpandedCard] = useState(null);
   const linesRef = useRef(null);
+  
+  // Set active filter based on URL when component mounts and handle scroll
+  useEffect(() => {
+    if (router.isReady) {
+      const { filter } = router.query;
+      if (filter === 'professional') {
+        setActiveFilter('/images/professional_headshot.jpeg');
+      } else if (filter === 'adventures') {
+        setActiveFilter('/images/biking_headshot.JPG');
+      } else {
+        setActiveFilter(null);
+      }
+      
+      // Scroll to portfolio section if hash is present and we have a filter
+      if (window.location.hash === '#portfolio-section' && filter) {
+        // Small timeout to ensure the page has rendered with filtered content
+        setTimeout(() => {
+          const portfolioSection = document.getElementById('portfolio-section');
+          if (portfolioSection) {
+            portfolioSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 300);
+      }
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1402,7 +1394,7 @@ const Home = () => {
       <Section>
         <Container style={{ paddingTop: '4rem', paddingBottom: '6rem', background: 'white' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <SectionTitle>MY PORTFOLIO</SectionTitle>
+          <SectionTitle id="portfolio-section">MY PORTFOLIO</SectionTitle>
           {activeFilter && (
             <button 
               onClick={() => setActiveFilter(null)}
@@ -1425,7 +1417,29 @@ const Home = () => {
         </div>
         <WorkGrid>
           {workItems
-            .filter(item => !activeFilter || item.avatar === activeFilter)
+            .filter(item => {
+              if (!activeFilter) return true;
+              
+              // Handle filter by type from URL query
+              if (activeFilter === 'professional') {
+                // Check for professional items by excluding adventures
+                return !item.avatar.includes('biking') && 
+                       item.avatar.includes('professional');
+              }
+              
+              if (activeFilter === 'adventures') {
+                // Check for adventure items
+                return item.avatar.includes('biking');
+              }
+              
+              // Handle direct avatar path matching
+              if (activeFilter.startsWith('/images/')) {
+                // Check if the avatar path contains the filter path (more flexible matching)
+                return item.avatar.includes(activeFilter.split('/').pop());
+              }
+              
+              return true;
+            })
             .map((item) => (
             <WorkCard 
               key={item.id}
